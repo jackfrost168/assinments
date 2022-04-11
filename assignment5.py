@@ -22,6 +22,7 @@ def deepwalk_walk(walk_length, start_node):
             walk.append(random.choice(cur_nbrs))
         else:
             break
+
     return walk
 
 
@@ -32,6 +33,7 @@ def generate_walks(nodes, walks_per_vertex, walk_length):
         random.shuffle(nodes)
         for v in nodes:
             walks.append(deepwalk_walk(walk_length=walk_length, start_node=v))
+
     return walks
 
 
@@ -110,7 +112,7 @@ class skip_gram():
 
                 # Calculate loss
                 # There are 2 parts to the loss function
-                # Part 1: -ve sum of all the output +
+                # Part 1: target sum of all the output +
                 # Part 2: length of context words * log of sum for all elements (exponential-ed) in the output layer before softmax (u)
 
                 self.loss += -np.sum([u[word.index(1)] for word in w_c]) + len(w_c) * np.log(np.sum(np.exp(u)))
@@ -124,15 +126,16 @@ class skip_gram():
         h = np.dot(x, self.w1)
         u = np.dot(h, self.w2)
         y_c = self.softmax(u)
+
         return y_c, h, u
 
     def softmax(self, x):
         e_x = np.exp(x - np.max(x))
+
         return e_x / e_x.sum(axis=0)
 
     def backprop(self, e, h, x):
         # Going backwards, we need to take derivative of E with respect of w2
-
         dl_dw2 = np.outer(h, e)
         dl_dw1 = np.outer(x, np.dot(self.w2, e.T))
 
@@ -141,7 +144,7 @@ class skip_gram():
         self.w2 = self.w2 - (self.lr * dl_dw2)
 
 
-epochs = 300
+epochs = 500
 input_nodes = nx.number_of_nodes(G)
 hidden_nodes = 2
 output_nodes = nx.number_of_nodes(G)
@@ -167,6 +170,8 @@ plt.savefig('loss_deepwalk.png')
 plt.show()
 plt.close()
 
+
+# Generate embeddings
 node_features = []
 print(nodes)
 for node in nodes:
