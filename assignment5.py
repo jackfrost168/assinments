@@ -8,9 +8,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 import networkx as nx
 import random
+
+
 # The constructed graph is undirected graph
 G = nx.read_edgelist('assignment5/karate_club.edgelist', create_using=nx.Graph())
-#print(G.adj['0'])
+
 
 # walk sequence begin with start_node
 def deepwalk_walk(walk_length, start_node):
